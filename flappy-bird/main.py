@@ -34,68 +34,38 @@ RED = (230, 70, 50)
 YELLOW = (250, 215, 40)
 ORANGE = (240, 130, 30)
 
-# 16x12 bird, one letter per pixel. Classic Flappy Bird style.
+# 17x12 bird traced from the reference image, one letter per pixel.
 BIRD_PALETTE = {
-    "K": (30, 20, 20),      # Black
-    "Y": (250, 215, 40),    # Yellow body
-    "W": (255, 255, 255),   # White eye
-    "B": (0, 0, 0),         # Black pupil
-    "O": (255, 140, 30),    # Orange beak
+    "K": (0, 0, 0),         # outline, pupil
+    "Y": (255, 235, 60),    # yellow body
+    "D": (254, 193, 7),     # darker belly
+    "W": (255, 255, 255),   # eye and wing
+    "O": (253, 87, 29),     # beak
 }
-# Base bird body (round, plump, classic)
-BIRD_BODY = [
-    "....KKKKKK....",
-    "..KKYYYYYYKK..",
-    ".KYYYYYYYYYYK.",
-    "KYYYYYYYYYYYK.",
-    "KYYYYYYYYYYYK.",
-    "KYYYYYYYYYYYK.",
-    "KYYYYWWYYYYYYK",
-    "KYYYYYBYYYYYOK",
-    "KYYYYYBYYYYYOK",
-    "KYYYYWWYYYYYOK",
-    ".KYYYYYYYYYYOK",
-    "..KKYYYYYKKOO.",
+BIRD_SPRITE = [
+    "......KKKKKK.....",
+    "....KKYYYYKWK....",
+    "...KYYYYYKWWWK...",
+    ".KKKKYYYYKWWKWK..",
+    "KWWWWKYYYKWWKWK..",
+    "KWWWWWKYYYKWWWK..",
+    "KYWWWYKYYYYKKKKK.",
+    ".KYYYKYYYYKOOOOOK",
+    "..KKKDDDDKOKKKKK.",
+    "....KDDDDDKOOOOK.",
+    ".....KKDDDDKKKKK.",
+    ".......KKKK......",
 ]
-WING_UP = [
-    ".KKKK..",
-    "KLLLLK.",
-    "KLLLLK.",
-    ".KLLK..",
-]
-WING_MID = [
-    "",
-    ".KKKK..",
-    "KLLLLK.",
-    "KLLLLK.",
-    ".KLLK..",
-]
-WING_DOWN = [
-    "",
-    "",
-    ".KKKK..",
-    "KLLLLK.",
-    "KLLLLK.",
-    ".KLLK..",
-]
+BIRD_SCALE = 4
 
 
-def make_bird_frame(wing):
-    """Build a bird frame by overlaying wings on the body."""
-    rows = [list(r.ljust(16, ".")) for r in BIRD_BODY]
-    # Overlay wings on the left side (starting at column 1)
-    for i, w in enumerate(wing):
-        if not w or i >= len(rows):
-            continue
-        for j, ch in enumerate(w):
-            if ch != "." and 1 + j < 16:
-                rows[i][1 + j] = ch
-    # Render to surface (scale 3x)
-    surf = pygame.Surface((16 * 3, len(rows) * 3), pygame.SRCALPHA)
-    for y, row in enumerate(rows):
+def make_bird():
+    w, h = len(BIRD_SPRITE[0]), len(BIRD_SPRITE)
+    surf = pygame.Surface((w * BIRD_SCALE, h * BIRD_SCALE), pygame.SRCALPHA)
+    for y, row in enumerate(BIRD_SPRITE):
         for x, ch in enumerate(row):
             if ch in BIRD_PALETTE:
-                pygame.draw.rect(surf, BIRD_PALETTE[ch], (x * 3, y * 3, 3, 3))
+                pygame.draw.rect(surf, BIRD_PALETTE[ch], (x * BIRD_SCALE, y * BIRD_SCALE, BIRD_SCALE, BIRD_SCALE))
     return surf
 
 
@@ -202,7 +172,7 @@ def make_pipe_surface(w, h, cap=False):
 
 class Bird:
     def __init__(self):
-        self.frames = [make_bird_frame(w) for w in (WING_UP, WING_MID, WING_DOWN)]
+        self.image = make_bird()
         self.reset()
 
     def reset(self):
@@ -218,17 +188,11 @@ class Bird:
 
     @property
     def rect(self):
-        return pygame.Rect(BIRD_X - 24, int(self.y) - 18, 48, 36)
+        return pygame.Rect(BIRD_X - 22, int(self.y) - 15, 44, 30)
 
     def draw(self, surf, now):
-        if self.vel < -2:
-            frame = self.frames[0]
-        elif self.vel > 4:
-            frame = self.frames[2]
-        else:
-            frame = self.frames[(now // 120) % 3]
         angle = max(-25, min(60, -self.vel * 4))
-        rotated = pygame.transform.rotate(frame, angle)
+        rotated = pygame.transform.rotate(self.image, angle)
         surf.blit(rotated, rotated.get_rect(center=(BIRD_X, int(self.y))))
 
 
