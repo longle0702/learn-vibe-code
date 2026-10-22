@@ -34,44 +34,68 @@ RED = (230, 70, 50)
 YELLOW = (250, 215, 40)
 ORANGE = (240, 130, 30)
 
-# 12x9 bird, one letter per pixel. Three wing positions.
+# 16x12 bird, one letter per pixel. Classic Flappy Bird style.
 BIRD_PALETTE = {
-    "K": (30, 20, 20),
-    "Y": (250, 215, 40),
-    "O": (240, 130, 30),
-    "W": (255, 255, 255),
-    "R": (230, 70, 50),
-    "L": (255, 240, 150),
+    "K": (30, 20, 20),      # Black
+    "Y": (250, 215, 40),    # Yellow body
+    "W": (255, 255, 255),   # White eye
+    "B": (0, 0, 0),         # Black pupil
+    "O": (255, 140, 30),    # Orange beak
 }
+# Base bird body (round, plump, classic)
 BIRD_BODY = [
-    "....KKKK....",
-    "..KKYYYYKK..",
-    ".KYYYYYKWWK.",
-    "KYYYYYYKWKWK",
-    "KYYYYYYYWWWK",
-    "KYYYYYYYYYYK",
-    ".KOOOYYKRRRK",
-    "..KKOOOKKRK.",
-    "....KKKK.KK.",
+    "....KKKKKK....",
+    "..KKYYYYYYKK..",
+    ".KYYYYYYYYYYK.",
+    "KYYYYYYYYYYYK.",
+    "KYYYYYYYYYYYK.",
+    "KYYYYYYYYYYYK.",
+    "KYYYYWWYYYYYYK",
+    "KYYYYYBYYYYYOK",
+    "KYYYYYBYYYYYOK",
+    "KYYYYWWYYYYYOK",
+    ".KYYYYYYYYYYOK",
+    "..KKYYYYYKKOO.",
 ]
-WING_UP = ["", "", "", "KLLK", "KLLLK", ".KLK"]
-WING_MID = ["", "", "", "", "KLLK", "KLLLK", ".KKK"]
-WING_DOWN = ["", "", "", "", "", "KLLK", "KLLLK", ".KKK"]
+WING_UP = [
+    ".KKKK..",
+    "KLLLLK.",
+    "KLLLLK.",
+    ".KLLK..",
+]
+WING_MID = [
+    "",
+    ".KKKK..",
+    "KLLLLK.",
+    "KLLLLK.",
+    ".KLLK..",
+]
+WING_DOWN = [
+    "",
+    "",
+    ".KKKK..",
+    "KLLLLK.",
+    "KLLLLK.",
+    ".KLLK..",
+]
 
 
 def make_bird_frame(wing):
-    rows = [list(r.ljust(12, ".")) for r in BIRD_BODY]
+    """Build a bird frame by overlaying wings on the body."""
+    rows = [list(r.ljust(16, ".")) for r in BIRD_BODY]
+    # Overlay wings on the left side (starting at column 1)
     for i, w in enumerate(wing):
-        if not w:
+        if not w or i >= len(rows):
             continue
         for j, ch in enumerate(w):
-            if ch != "." and i < len(rows) and 1 + j < 12:
+            if ch != "." and 1 + j < 16:
                 rows[i][1 + j] = ch
-    surf = pygame.Surface((12 * 4, len(rows) * 4), pygame.SRCALPHA)
+    # Render to surface (scale 3x)
+    surf = pygame.Surface((16 * 3, len(rows) * 3), pygame.SRCALPHA)
     for y, row in enumerate(rows):
         for x, ch in enumerate(row):
             if ch in BIRD_PALETTE:
-                pygame.draw.rect(surf, BIRD_PALETTE[ch], (x * 4, y * 4, 4, 4))
+                pygame.draw.rect(surf, BIRD_PALETTE[ch], (x * 3, y * 3, 3, 3))
     return surf
 
 
@@ -194,7 +218,7 @@ class Bird:
 
     @property
     def rect(self):
-        return pygame.Rect(BIRD_X - 14, int(self.y) - 10, 28, 20)
+        return pygame.Rect(BIRD_X - 24, int(self.y) - 18, 48, 36)
 
     def draw(self, surf, now):
         if self.vel < -2:
