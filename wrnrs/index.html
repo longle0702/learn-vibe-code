@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>First Date Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fff6f2; --surface: #ffffff; --text: #2a1a1f; --muted: #7a6368; --line: #ecd9d4;
+  --a1: #d9453b; --a2: #b0305a; --a3: #5b2a5e; --a4: #b7791f;
+  --amix: linear-gradient(135deg, #d9453b, #b0305a 55%, #5b2a5e);
+  --accent: var(--a1); --accent-bg: var(--a1);
+  --on-accent: #fff; --shadow: 0 10px 30px rgba(90, 30, 40, .15);
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1015; --surface: #281a20; --text: #f7e9e6; --muted: #b79ea4; --line: #44303a;
+    --a1: #ff6b5e; --a2: #e8618f; --a3: #b57ab8; --a4: #f0b04a;
+    --amix: linear-gradient(135deg, #ff6b5e, #e8618f 55%, #b57ab8);
+    --on-accent: #1a1015; --shadow: 0 10px 30px rgba(0, 0, 0, .5);
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--sans); background: var(--bg); color: var(--text);
+  min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; align-items: center;
+}
+body[data-mode="1"] { --accent: var(--a1); --accent-bg: var(--a1); }
+body[data-mode="2"] { --accent: var(--a2); --accent-bg: var(--a2); }
+body[data-mode="3"] { --accent: var(--a3); --accent-bg: var(--a3); }
+body[data-mode="mix"] { --accent: var(--a2); --accent-bg: var(--amix); }
+.app { width: 100%; max-width: 480px; padding: 12px 16px 24px; display: flex; flex-direction: column; flex: 1; }
+main { flex: 1; display: flex; flex-direction: column; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; }
+.brand { font-family: var(--serif); font-weight: 700; font-size: 18px; margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, .mode-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+button:disabled { cursor: not-allowed; opacity: .5; }
+.btn {
+  min-height: 48px; padding: 0 20px; border-radius: 14px; border: 2px solid var(--line);
+  background: var(--surface); font-weight: 600; font-size: 16px;
+}
+.btn.primary { background: var(--accent-bg); border-color: transparent; color: var(--on-accent); }
+.btn.small { min-height: 44px; padding: 0 14px; font-size: 14px; }
+.btn.ghost { background: transparent; }
+.hdr-actions { display: flex; gap: 6px; }
+[hidden] { display: none !important; }
+
+/* start */
+.hero { text-align: center; margin: 24px 0 20px; }
+.hero h1 { font-family: var(--serif); font-size: 40px; line-height: 1.1; margin: 0 0 10px; }
+.hero p { color: var(--muted); margin: 0; font-size: 17px; }
+.modes { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.mode-card {
+  width: 100%; text-align: left; min-height: 76px; padding: 14px 16px; border-radius: 16px;
+  background: var(--surface); border: 2px solid var(--line); display: flex; align-items: center; gap: 14px;
+  position: relative;
+}
+.mode-card .dot { width: 14px; align-self: stretch; border-radius: 8px; background: var(--accent-bg); flex: none; }
+.mode-card .meta { flex: 1; min-width: 0; }
+.mode-card .name { font-weight: 600; font-size: 18px; display: block; }
+.mode-card .desc { color: var(--muted); font-size: 14px; display: block; }
+.mode-card .count { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.mode-card.suggested { border-color: var(--accent); }
+.tag { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; background: var(--accent-bg); color: var(--on-accent);
+  border-radius: 99px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; }
+
+/* play */
+#play { flex: 1; display: flex; flex-direction: column; }
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 8px 0 4px; }
+.tab { min-height: 44px; padding: 0 2px; border-radius: 12px; border: 2px solid var(--line); background: var(--surface); font-weight: 600; font-size: 14px; }
+.tab[aria-pressed="true"] { background: var(--accent-bg); color: var(--on-accent); border-color: transparent; }
+.progress { text-align: center; color: var(--muted); font-weight: 600; margin: 10px 0; font-variant-numeric: tabular-nums; }
+.stage { flex: 1; display: flex; align-items: center; justify-content: center; perspective: 1200px; padding: 8px 0; }
+.card {
+  width: 100%; min-height: 320px; border-radius: 24px; padding: 32px 24px; background: var(--surface);
+  border: 2px solid var(--line); border-top: 10px solid var(--accent); box-shadow: var(--shadow);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 18px;
+}
+.card.flip { animation: flip .38s ease both; }
+@keyframes flip { from { transform: rotateY(-70deg) translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+.badge { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--on-accent); border-radius: 99px; padding: 3px 10px; }
+.badge[data-level="1"] { background: var(--a1); } .badge[data-level="2"] { background: var(--a2); } .badge[data-level="3"] { background: var(--a3); } .badge[data-level="wild"] { background: var(--a4); }
+.question { font-family: var(--serif); font-size: 26px; line-height: 1.3; margin: 0; font-weight: 500; overflow-wrap: anywhere; }
+@media (min-width: 480px) { .question { font-size: 28px; } }
+.controls { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 12px; }
+.complete { margin-top: 12px; padding: 16px; border: 2px solid var(--accent); border-radius: 18px; background: var(--surface); display: grid; gap: 10px; text-align: center; }
+.complete h2 { font-family: var(--serif); margin: 0; font-size: 22px; }
+
+/* dialog */
+dialog { border: 0; border-radius: 18px; padding: 22px; max-width: 360px; width: calc(100% - 32px); background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+dialog::backdrop { background: rgba(0, 0, 0, .5); }
+dialog h2 { margin: 0 0 8px; font-family: var(--serif); }
+dialog .row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+@media (prefers-reduced-motion: reduce) { .card.flip { animation: none; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <p class="brand">First Date Deck</p>
+    <div class="hdr-actions">
+      <button class="btn small ghost" id="btn-levels" hidden>Levels</button>
+      <button class="btn small ghost" id="btn-restart">Restart all</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="start" hidden>
+      <div class="hero">
+        <h1>First Date Deck</h1>
+        <p>Draw a card, answer out loud, and let the conversation wander.</p>
+      </div>
+      <ul class="modes" id="mode-list"></ul>
+    </section>
+
+    <section id="play" hidden>
+      <div class="tabs" id="tabs" role="group" aria-label="Switch mode"></div>
+      <div class="progress" id="progress"></div>
+      <div class="stage">
+        <article class="card" id="card">
+          <span class="badge" id="badge" hidden></span>
+          <p class="question" id="question" aria-live="polite"></p>
+        </article>
+      </div>
+      <div class="controls" id="controls">
+        <button class="btn" id="btn-prev">Previous</button>
+        <button class="btn primary" id="btn-next">Next</button>
+      </div>
+      <div class="complete" id="complete" hidden>
+        <h2 id="complete-title">Level complete</h2>
+        <button class="btn primary" id="c-primary"></button>
+        <button class="btn" id="c-secondary" hidden></button>
+        <button class="btn ghost" id="c-back">Back to levels</button>
+        <button class="btn small ghost" id="c-prev">Previous</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="confirm">
+  <h2>Restart all?</h2>
+  <p>Every deck will be reshuffled and your progress cleared.</p>
+  <div class="row">
+    <button class="btn" id="confirm-no">Cancel</button>
+    <button class="btn primary" id="confirm-yes">Restart</button>
+  </div>
+</dialog>
+
+<script>
+"use strict";
+
+/* ========== 1. DATA ========== */
+// To add a question, add one line here with a unique id and a level of 1, 2, 3 or "wild" (a wildcard activity, shared by every level).
+const QUESTIONS = [
+  { id: "L1-01", level: 1, text: "What about me is most strange or unfamiliar?" },
+  { id: "L1-02", level: 1, text: "Do you think I’ve ever had my heart broken?" },
+  { id: "L1-03", level: 1, text: "What do you think I’d splurge on?" },
+  { id: "L1-04", level: 1, text: "What do you think my major is?" },
+  { id: "L1-05", level: 1, text: "What do you think I’m going to do in the future (work/employment)?" },
+  { id: "L1-06", level: 1, text: "What was your first impression of me?" },
+  { id: "L1-07", level: 1, text: "Do you think I was popular in high school?" },
+  { id: "L1-08", level: 1, text: "On a scale of 1–10; how messy do you think my car is?" },
+  { id: "L1-09", level: 1, text: "Do you think I have a sibling? Older or younger?" },
+  { id: "L1-10", level: 1, text: "Who do you think is my favorite artist?" },
+  { id: "L1-11", level: 1, text: "Where do you think I grew up?" },
+  { id: "L1-12", level: 1, text: "What do you think my go-to coffee or drink order is?" },
+  { id: "L1-13", level: 1, text: "Do you think I’m more of a morning person or a night owl?" },
+  { id: "L1-14", level: 1, text: "What do you think my favorite movie genre is?" },
+  { id: "L1-15", level: 1, text: "Do you think I’m good at keeping secrets?" },
+  { id: "L1-16", level: 1, text: "What do you think my go-to comfort food is?" },
+  { id: "L1-17", level: 1, text: "Do you think I prefer cats or dogs?" },
+  { id: "L1-18", level: 1, text: "Do you think I’m an introvert or an extrovert?" },
+  { id: "L1-19", level: 1, text: "What do you think my favorite hobby is?" },
+  { id: "L1-20", level: 1, text: "What do you think my dream vacation destination is?" },
+  { id: "L1-21", level: 1, text: "Do you think I’m good at cooking?" },
+  { id: "L1-22", level: 1, text: "Do you think I prefer texting or calling?" },
+  { id: "L1-23", level: 1, text: "What do you think my favorite sport to watch is?" },
+  { id: "L1-24", level: 1, text: "Do you think I like to dance?" },
+  { id: "L1-25", level: 1, text: "Do you think I’m a planner or spontaneous?" },
+  { id: "L1-26", level: 1, text: "Do you think I prefer coffee or tea?" },
+  { id: "L1-27", level: 1, text: "Do you think I like spicy food?" },
+  { id: "L1-28", level: 1, text: "What do you think my favorite social media platform is?" },
+  { id: "L1-29", level: 1, text: "Do you think I prefer city life or country life?" },
+  { id: "L1-30", level: 1, text: "Do you think I’m more likely to binge-watch shows or watch one episode at a time?" },
+  { id: "L1-31", level: 1, text: "What do you think my favorite dessert is?" },
+  { id: "L2-01", level: 2, text: "What is your most defining characteristic?" },
+  { id: "L2-02", level: 2, text: "Are you lying to yourself about anything?" },
+  { id: "L2-03", level: 2, text: "How are you; really?" },
+  { id: "L2-04", level: 2, text: "What is your least favorite personality trait in a person?" },
+  { id: "L2-05", level: 2, text: "When was the last time you felt lucky to be you?" },
+  { id: "L2-06", level: 2, text: "Which one of your parent’s personality traits do you want to keep/let go of?" },
+  { id: "L2-07", level: 2, text: "What would you tell your younger self and what have you learned from this lesson?" },
+  { id: "L2-08", level: 2, text: "What is the last thing you lied to your mom about?" },
+  { id: "L2-09", level: 2, text: "What’s the worst pain you’ve ever been in that wasn’t physical?" },
+  { id: "L2-10", level: 2, text: "What’s the most unexplainable thing that has ever happened to you?" },
+  { id: "L2-11", level: 2, text: "What would your younger self not believe about your life today?" },
+  { id: "L2-12", level: 2, text: "What non-domestic animal describes you and why?" },
+  { id: "L2-13", level: 2, text: "What is your favorite adjective with which to be described?" },
+  { id: "L2-14", level: 2, text: "What are you still trying to prove to yourself?" },
+  { id: "L2-15", level: 2, text: "When was the last time you cried?" },
+  { id: "L2-16", level: 2, text: "If you could instill one personality trait in your child; what would it be?" },
+  { id: "L2-17", level: 2, text: "What’s the hardest part about dating you?" },
+  { id: "L2-18", level: 2, text: "What’s your favorite song lyric that you can think of off the top of your head?" },
+  { id: "L2-19", level: 2, text: "Think of someone that you admire. What made you think about them specifically?" },
+  { id: "L2-20", level: 2, text: "What’s the biggest mistake you’ve made?" },
+  { id: "L2-21", level: 2, text: "What’s a phrase that you say that you wish you would stop saying?" },
+  { id: "L2-22", level: 2, text: "What’s one thing about me tonight that surprised you?" },
+  { id: "L2-23", level: 2, text: "How do you think we’re most similar so far?" },
+  { id: "L2-24", level: 2, text: "What’s a topic you feel we could talk about for hours?" },
+  { id: "L2-25", level: 2, text: "What’s a question you want to ask me but haven’t yet?" },
+  { id: "L2-26", level: 2, text: "What’s a value you think we might share?" },
+  { id: "L2-27", level: 2, text: "What’s one thing you’d like to teach me?" },
+  { id: "L2-28", level: 2, text: "What would make a great second date?" },
+  { id: "L2-29", level: 2, text: "What’s a dream you’re working toward right now?" },
+  { id: "L3-01", level: 3, text: "What about me surprised you?" },
+  { id: "L3-02", level: 3, text: "Based on what you know about me; do you have a Netflix recommendation?" },
+  { id: "L3-03", level: 3, text: "What do you think my superpower is?" },
+  { id: "L3-04", level: 3, text: "What do you think our most important similarities are?" },
+  { id: "L3-05", level: 3, text: "What would be the perfect gift for me?" },
+  { id: "L3-06", level: 3, text: "How would you describe me to a stranger?" },
+  { id: "L3-07", level: 3, text: "What do I need to hear right now?" },
+  { id: "L3-08", level: 3, text: "Based on what you’ve learned about me; does my social media portray me accurately?" },
+  { id: "L3-09", level: 3, text: "What is a lesson you will take away from our conversation?" },
+  { id: "L3-10", level: 3, text: "What can I help you with?" },
+  { id: "L3-11", level: 3, text: "What do you think I fear the most?" },
+  { id: "L3-12", level: 3, text: "What topic would you trust my advice on?" },
+  { id: "L3-13", level: 3, text: "What about me is the hardest for you to understand?" },
+  { id: "L3-14", level: 3, text: "If we were a band; what would be our name?" },
+  { id: "L3-15", level: 3, text: "Admit something." },
+  { id: "L3-16", level: 3, text: "What parts of yourself do you see in me?" },
+  { id: "L3-17", level: 3, text: "How does one earn your vulnerability?" },
+  { id: "L3-18", level: 3, text: "Dare your partner to do something out of their comfort zone next week." },
+  { id: "L3-19", level: 3, text: "What question were you most afraid to answer?" },
+  { id: "L3-20", level: 3, text: "Why do you think we met?" },
+  { id: "L3-21", level: 3, text: "When this game is over; what will be something you will remember about me?" },
+  { id: "L3-22", level: 3, text: "How do our personalities complement each other?" },
+  { id: "L3-23", level: 3, text: "What would make you feel closer to me?" },
+  { id: "L3-24", level: 3, text: "What do you admire most about me?" },
+  { id: "L3-25", level: 3, text: "In one word; describe how you feel right now." },
+  { id: "L3-26", level: 3, text: "Do you believe everyone has a calling? If so; do you think I’ve found mine?" },
+  { id: "L3-27", level: 3, text: "What can we create together?" },
+  { id: "L3-28", level: 3, text: "What answer of mine made you light up?" },
+  { id: "L3-29", level: 3, text: "What’s the most attractive quality about me that isn’t physical?" },
+  { id: "L3-30", level: 3, text: "What is the worst assumption someone has made about you?" },
+  { id: "L3-31", level: 3, text: "How did you get over your first love?" },
+  { id: "L3-32", level: 3, text: "What’s your favorite part of yourself that isn’t something physical?" },
+  { id: "L3-33", level: 3, text: "What belief about yourself no longer serves you?" },
+  { id: "L3-34", level: 3, text: "What do you need to forgive yourself for?" },
+  { id: "L3-35", level: 3, text: "Who do I remind you of?" },
+  { id: "L3-36", level: 3, text: "How do you know you’re in love?" },
+  { id: "L3-37", level: 3, text: "Why is it so difficult for us to be vulnerable?" },
+  { id: "L3-38", level: 3, text: "Who in your life do you feel you can be most vulnerable with?" },
+  { id: "L3-39", level: 3, text: "Is there anyone who’s changed your life but doesn’t know it?" },
+  { id: "L3-40", level: 3, text: "Is there a certain feeling that you miss?" },
+  { id: "L3-41", level: 3, text: "When was the last time you used your pain to help someone else?" },
+  { id: "L3-42", level: 3, text: "When was the last time you felt the most yourself?" },
+  { id: "L3-43", level: 3, text: "Are you the person you thought you would become? Why or why not?" },
+  { id: "W-01", level: "wild", text: "Draw a picture together (30 sec)" },
+  { id: "W-02", level: "wild", text: "Look into each other’s eyes for 30 seconds. What did you notice?" },
+  { id: "W-03", level: "wild", text: "Write a message to each other and give it to each other. Open it once you have left." },
+  { id: "W-04", level: "wild", text: "Think of your favorite childhood TV show of all time; on the count of three say it out loud (both players)." },
+  { id: "W-05", level: "wild", text: "Take a selfie together." },
+  { id: "W-06", level: "wild", text: "Staring contest. The first person to blink must reveal a personal problem and ask the other for advice on how they might handle it." },
+  { id: "W-07", level: "wild", text: "Create your own question. Anything. Make it count." },
+  { id: "W-08", level: "wild", text: "Tell the other person to close their eyes and to keep them closed. (Wait 10 seconds. Describe to them in detail your favorite memory of them/two of you)." },
+  { id: "W-09", level: "wild", text: "Press shuffle on your music library. Explain the first song that comes up!" },
+  { id: "W-10", level: "wild", text: "Both players share something you’re most grateful for in this current moment." },
+  { id: "W-11", level: "wild", text: "Draw your current feelings; then compare." },
+  { id: "W-12", level: "wild", text: "Show the first photo in your camera roll. Explain." },
+  { id: "W-13", level: "wild", text: "Think of something that you dislike that most people don’t. On the count of 3; say it out loud." },
+  { id: "W-14", level: "wild", text: "How can I add 1% more happiness to your life?" },
+  { id: "W-15", level: "wild", text: "Improvise a 15-second dance routine together and perform it." },
+  { id: "W-16", level: "wild", text: "Make up a short story together; alternating one sentence at a time." },
+  { id: "W-17", level: "wild", text: "Pick an object nearby and invent a silly new use for it. Explain to each other." },
+  { id: "W-18", level: "wild", text: "Play a quick round of \"20 Questions\" where one thinks of something and the other guesses." },
+  { id: "W-19", level: "wild", text: "Create a secret handshake that only the two of you know." },
+  { id: "W-20", level: "wild", text: "Mimic each other’s laugh for 10 seconds; then discuss what you noticed." },
+  { id: "W-21", level: "wild", text: "Choose a random word (e.g.; from a book or app) and both say the first memory it sparks." },
+  { id: "W-22", level: "wild", text: "Act out a scene from a movie you both know without speaking; then guess the movie." },
+  { id: "W-23", level: "wild", text: "Each person shares a 5-second impression of the other as an animal; then explain why." },
+  { id: "W-24", level: "wild", text: "Take turns humming a tune; the other guesses the song or makes up lyrics for it." },
+  { id: "W-25", level: "wild", text: "Build a tiny \"sculpture\" from nearby objects (e.g.; pens; cups) in 1 minute; then compare." },
+  { id: "W-26", level: "wild", text: "Whisper a random compliment to each other at the same time; then share what you heard." },
+  { id: "W-27", level: "wild", text: "Play \"Two Truths and a Lie\" with one round each; then guess the lie." },
+  { id: "W-28", level: "wild", text: "Point to something in the room and tell a 10-second fictional story about its \"life.\"" },
+];
+
+const MODES = [1, 2, 3, "mix"];
+const MODE_INFO = {
+  1: { name: "Level 1 · Perception", desc: "First impressions and guesses, plus wildcards" },
+  2: { name: "Level 2 · Connection", desc: "Values and experiences, plus wildcards" },
+  3: { name: "Level 3 · Reflection", desc: "Reflecting on the date and each other, plus wildcards" },
+  mix: { name: "Mix", desc: "Everything from levels 1–3 and the wildcards" },
+};
+const STORAGE_KEY = "fdd-state";
+const FLIP_MS = 380;
+
+/* ========== 2. STATE ========== */
+const QS = dedupe(QUESTIONS);
+const BY_ID = new Map(QS.map(q => [q.id, q]));
+let state = loadState();
+
+function dedupe(list) {
+  const seen = new Set();
+  return list.filter(q => {
+    if (seen.has(q.id)) { console.warn("Duplicate question id dropped:", q.id); return false; }
+    seen.add(q.id);
+    return true;
+  });
+}
+// A level's pool is its own questions plus the shared wildcards; Mix holds each question once.
+function poolIds(mode) {
+  return QS.filter(q => mode === "mix" || q.level === mode || q.level === "wild").map(q => q.id);
+}
+function freshState() {
+  const s = { currentMode: null, remaining: {}, history: {}, viewIndex: -1 };
+  MODES.forEach(m => { s.remaining[m] = poolIds(m); s.history[m] = []; });
+  return s;
+}
+// Keep saved progress but reconcile it with the current question list.
+function loadState() {
+  const s = freshState();
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (!saved || typeof saved !== "object") return s;
+    MODES.forEach(m => {
+      const pool = new Set(poolIds(m));
+      const hist = ((saved.history && saved.history[m]) || []).filter((id, i, a) => pool.has(id) && a.indexOf(id) === i);
+      const done = new Set(hist);
+      const rem = ((saved.remaining && saved.remaining[m]) || []).filter((id, i, a) => pool.has(id) && !done.has(id) && a.indexOf(id) === i);
+      const known = new Set([...hist, ...rem]);
+      poolIds(m).forEach(id => { if (!known.has(id)) rem.push(id); });
+      s.history[m] = hist; s.remaining[m] = rem;
+    });
+    if (MODES.includes(saved.currentMode)) s.currentMode = saved.currentMode;
+    s.viewIndex = Number.isInteger(saved.viewIndex) ? saved.viewIndex : -1;
+    if (s.currentMode !== null) {
+      const n = s.history[s.currentMode].length;
+      if (s.viewIndex < 0 || s.viewIndex >= n) s.viewIndex = n - 1;
+    }
+  } catch (e) { /* storage unavailable or corrupt: start fresh */ }
+  return s;
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
+}
+
+/* ========== 3. PURE FUNCTIONS ========== */
+// Pick a random id from remaining[mode], move it to history. Returns the id or null.
+function draw(s, mode, rng = Math.random) {
+  const rem = s.remaining[mode];
+  if (!rem.length) return null;
+  const id = rem.splice(Math.floor(rng() * rem.length), 1)[0];
+  s.history[mode].push(id);
+  return id;
+}
+function isComplete(s, mode) {
+  return s.remaining[mode].length === 0 && s.history[mode].length > 0;
+}
+// Refill one pool (reshuffled) and clear its history.
+function resetMode(s, mode, rng = Math.random) {
+  const ids = poolIds(mode);
+  for (let i = ids.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [ids[i], ids[j]] = [ids[j], ids[i]];
+  }
+  s.remaining[mode] = ids;
+  s.history[mode] = [];
+  if (s.currentMode === mode) s.viewIndex = -1;
+}
+function resetAll(s) {
+  MODES.forEach(m => resetMode(s, m));
+}
+
+/* ========== 4. RENDERING ========== */
+const $ = id => document.getElementById(id);
+const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let busy = false;
+
+function render(animate) {
+  const mode = state.currentMode;
+  document.body.dataset.mode = mode === null ? "1" : String(mode);
+  $("start").hidden = mode !== null;
+  $("play").hidden = mode === null;
+  $("btn-levels").hidden = mode === null;
+  if (mode === null) renderStart(); else renderPlay(animate);
+}
+
+function renderStart() {
+  const list = $("mode-list");
+  list.textContent = "";
+  MODES.forEach(m => {
+    const total = poolIds(m).length;
+    const li = document.createElement("li");
+    const b = document.createElement("button");
+    b.className = "mode-card" + (m === 1 && total ? " suggested" : "");
+    const v = m === "mix" ? "--a2" : "--a" + m;
+    b.style.setProperty("--accent", `var(${v})`);
+    b.style.setProperty("--accent-bg", `var(${m === "mix" ? "--amix" : v})`);
+    b.disabled = total === 0;
+    const label = MODE_INFO[m];
+    b.innerHTML = '<span class="dot"></span><span class="meta"><span class="name"></span><span class="desc"></span></span><span class="count"></span>';
+    b.querySelector(".name").textContent = label.name;
+    if (m === 1 && total) {
+      const t = document.createElement("span");
+      t.className = "tag"; t.textContent = "Start here";
+      b.querySelector(".name").appendChild(t);
+    }
+    b.querySelector(".desc").textContent = total ? label.desc : "No questions yet";
+    b.querySelector(".count").textContent = `${state.history[m].length} / ${total}`;
+    b.addEventListener("click", () => setMode(m));
+    li.appendChild(b);
+    list.appendChild(li);
+  });
+}
+
+function renderPlay(animate) {
+  const mode = state.currentMode;
+  const hist = state.history[mode];
+  const total = poolIds(mode).length;
+
+  const tabs = $("tabs");
+  tabs.textContent = "";
+  MODES.forEach(m => {
+    const t = document.createElement("button");
+    t.className = "tab";
+    t.textContent = m === "mix" ? "Mix" : "L" + m;
+    t.setAttribute("aria-label", MODE_INFO[m].name);
+    t.setAttribute("aria-pressed", String(m === mode));
+    t.disabled = poolIds(m).length === 0;
+    t.addEventListener("click", () => { if (m !== state.currentMode) setMode(m); });
+    tabs.appendChild(t);
+  });
+
+  const q = BY_ID.get(hist[state.viewIndex]);
+  const card = $("card");
+  $("question").textContent = q ? q.text : total ? "Tap Next to draw your first card." : "No questions yet";
+  const badge = $("badge");
+  badge.hidden = !(q && (mode === "mix" || q.level === "wild"));
+  if (!badge.hidden) { badge.dataset.level = q.level; badge.textContent = q.level === "wild" ? "Wildcard" : "Level " + q.level; }
+  $("progress").textContent = `${Math.max(state.viewIndex + 1, 0)} / ${total}`;
+
+  if (animate && !reducedMotion()) {
+    card.classList.remove("flip");
+    void card.offsetWidth;
+    card.classList.add("flip");
+  }
+
+  const finished = isComplete(state, mode) && state.viewIndex === hist.length - 1;
+  $("controls").hidden = finished;
+  $("complete").hidden = !finished;
+  $("btn-prev").disabled = state.viewIndex <= 0;
+  $("btn-next").disabled = busy || total === 0;
+  if (finished) renderComplete(mode);
+}
+
+function renderComplete(mode) {
+  const p = $("c-primary"), s = $("c-secondary");
+  $("complete-title").textContent = mode === "mix" ? "Mix complete" : `Level ${mode} complete`;
+  s.hidden = mode === "mix";
+  if (mode === 1 || mode === 2) {
+    p.textContent = `Move to Level ${mode + 1}`; p.dataset.action = "goto"; p.dataset.target = mode + 1;
+    s.textContent = "Replay this level";
+  } else if (mode === 3) {
+    p.textContent = "Try Mix"; p.dataset.action = "goto"; p.dataset.target = "mix";
+    s.textContent = "Replay Level 3";
+  } else {
+    p.textContent = "Reshuffle Mix"; p.dataset.action = "replay";
+  }
+}
+
+/* ========== 5. ACTIONS & EVENT WIRING ========== */
+function setMode(mode) {
+  state.currentMode = mode;
+  state.viewIndex = state.history[mode].length - 1;
+  if (state.viewIndex < 0 && draw(state, mode) !== null) state.viewIndex = 0;
+  saveState();
+  render(true);
+  lockNext();
+}
+// Disable Next while the card transition plays so a double tap can't draw twice.
+function lockNext() {
+  busy = !reducedMotion();
+  if (!busy) return;
+  $("btn-next").disabled = true;
+  setTimeout(() => {
+    busy = false;
+    if (state.currentMode !== null) $("btn-next").disabled = poolIds(state.currentMode).length === 0;
+  }, FLIP_MS);
+}
+function goLevels() {
+  state.currentMode = null;
+  saveState();
+  render(false);
+}
+function next() {
+  const mode = state.currentMode;
+  if (mode === null || busy) return;
+  const last = state.history[mode].length - 1;
+  if (state.viewIndex < last) state.viewIndex = last;
+  else if (draw(state, mode) !== null) state.viewIndex = state.history[mode].length - 1;
+  else return;
+  saveState();
+  render(true);
+  lockNext();
+}
+function prev() {
+  if (state.currentMode === null || state.viewIndex <= 0) return;
+  state.viewIndex--;
+  saveState();
+  render(true);
+}
+function replay() {
+  resetMode(state, state.currentMode);
+  setMode(state.currentMode);
+}
+
+$("btn-next").addEventListener("click", next);
+$("btn-prev").addEventListener("click", prev);
+$("c-prev").addEventListener("click", prev);
+$("c-back").addEventListener("click", goLevels);
+$("btn-levels").addEventListener("click", goLevels);
+$("c-primary").addEventListener("click", e => {
+  const d = e.currentTarget.dataset;
+  if (d.action === "goto") setMode(d.target === "mix" ? "mix" : Number(d.target)); else replay();
+});
+$("c-secondary").addEventListener("click", replay);
+
+const dlg = $("confirm");
+$("btn-restart").addEventListener("click", () => dlg.showModal());
+$("confirm-no").addEventListener("click", () => dlg.close());
+$("confirm-yes").addEventListener("click", () => {
+  dlg.close();
+  resetAll(state);
+  state.currentMode = null;
+  state.viewIndex = -1;
+  saveState();
+  render(false);
+});
+
+document.addEventListener("keydown", e => {
+  if (dlg.open || state.currentMode === null || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
+  else if ((e.key === " " || e.key === "Enter") && e.target.tagName !== "BUTTON") {
+    e.preventDefault();
+    if ($("complete").hidden) next();
+  }
+});
+
+/* ========== 6. SELF-TEST ========== */
+// Run runSelfTest() in the console. Works on a throwaway state, not the saved one.
+function runSelfTest() {
+  const s = freshState();
+  MODES.forEach(m => {
+    const expected = poolIds(m);
+    const seen = new Map();
+    let id;
+    while ((id = draw(s, m)) !== null) seen.set(id, (seen.get(id) || 0) + 1);
+    const ok = seen.size === expected.length && expected.every(e => seen.get(e) === 1)
+      && s.history[m].length === expected.length && isComplete(s, m) === (expected.length > 0);
+    console.assert(ok, `mode ${m}: each id should appear exactly once`);
+    if (!ok) throw new Error("Self-test failed for mode " + m);
+  });
+  console.log("runSelfTest: all modes OK", MODES.map(m => `${m}:${poolIds(m).length}`).join(" "));
+  return true;
+}
+
+/* ========== INIT ========== */
+render(false);
+</script>
+</body>
+</html>
