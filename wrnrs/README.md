@@ -12,9 +12,15 @@ The question lists were taken from this article: <https://ahaslides.com/blog/we-
 
 I edited the lists for a first date: I removed near-duplicates, dropped questions that assume you already know each other, and rewrote a few. The question text is not my own work. If you are a rights holder and want it removed, please open an issue.
 
+## Play online
+
+**<https://longle0702.github.io/learn-vibe-code/wrnrs/>**
+
+Open it on your phone and use "Add to Home Screen" to keep it like an app.
+
 ## How to play
 
-1. Open `index.html` in any browser. There is no build step or server.
+1. Open the link above, or open `index.html` locally in any browser. There is no build step or server.
 2. Pick a mode:
    - **Level 1 – Perception:** first impressions and guesses
    - **Level 2 – Connection:** values and experiences
